@@ -34,11 +34,11 @@ class Clock extends Component {
         const day = firstDayOfWeek.getDay();
         const dayDiff = firstDayOfWeek.getDate() - day + (day === 0 ? -6 : 1);
         const monday = new Date(firstDayOfWeek.setDate(dayDiff)).toString().substring(8, 10);
-        
+        console.log(monday);
         const presentDay = new Date();
         // get selected day
         var weekDay = this.props.dayOfWeek.substring(0, 3);
-        var weekDayFormat = Number.parseInt(monday) + this.props.dayIndex;
+        var weekDayFormat = Number.parseInt(monday,10) + this.props.dayIndex;
 
         // get current month number in mm format
         const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

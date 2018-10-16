@@ -92,6 +92,7 @@ body {
   border-left-width: 1px;
   border-bottom-width: 0;
   text-align: center;
+  border-bottom: 1px solid #ffffff;
 }
 
 .rows:last-child {

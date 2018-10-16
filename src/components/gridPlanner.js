@@ -101,7 +101,7 @@ class GridPlanner extends Component {
       <div className="gridPlanner">
           {this.props.horizontal.map((val,indexColumn) => 
             <div className="columns" key={val} data-column-name={indexColumn}>
-              
+              {this.props.vertical.map(indexRow => <div className="rows" key={indexRow}></div>)}
             </div>)}   
       </div>
     );

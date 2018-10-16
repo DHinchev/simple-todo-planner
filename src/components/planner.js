@@ -105,7 +105,7 @@ class Planner extends Component {
             }
             
             taskHeight = endPosition - topPosition;
-            elementHeight = taskHeight * timeSlotElementHeight + timeSlotElementHeight;
+            elementHeight = taskHeight * timeSlotElementHeight;
             elementTop = topPosition * timeSlotElementHeight;
             height.push(elementHeight);
             top.push(elementTop);
@@ -134,19 +134,19 @@ class Planner extends Component {
                 <div className="list-group">
                 {this.state.todos.map((todo, index) => (
                     <div className = "list-group-item task" key = {index} data-start={todo.todoStartTime} data-end={todo.todosEndTime} data-day={todo.todoDayIndex}>
-                    <img src={Plus} className="plus-icon-task" width="25px" height="25px" alt="plus icon for task" onClick={this.openTaskDetails}/>
-                    <img src={Close} className="close-icon-task" width="35px" height="35px" alt="close icon for task" onClick={this.closeTaskDetails}/>
-                    <h4 className = "list-group-item-heading" > 
-                        {todo.todoTitle} { " " } 
-                        <span className = "label label-info" > 
-                        {todo.todoPriority}
-                        </span>
-                    </h4>
-                    <p className="list-group-item-responsible">{todo.todoResponsible}</p> 
-                    <p className="list-group-item-description"> {todo.todoDescription}</p>
-                    <Clock startTime={todo.todoStartTime} endTime={todo.todosEndTime} dayOfWeek={todo.todoDays}  dayIndex={todo.todoDayIndex} deadline={"12, 05, 2018"}/>
+                        <img src={Plus} className="plus-icon-task" width="25px" height="25px" alt="plus icon for task" onClick={this.openTaskDetails}/>
+                        <img src={Close} className="close-icon-task" width="35px" height="35px" alt="close icon for task" onClick={this.closeTaskDetails}/>
+                        <h4 className = "list-group-item-heading" > 
+                            {todo.todoTitle} { " " } 
+                            <span className = "label label-info" > 
+                                {todo.todoPriority}
+                            </span>
+                        </h4>
+                        <p className="list-group-item-responsible">{todo.todoResponsible}</p> 
+                        <p className="list-group-item-description"> {todo.todoDescription}</p>
+                        <Clock startTime={todo.todoStartTime} endTime={todo.todosEndTime} dayOfWeek={todo.todoDays}  dayIndex={todo.todoDayIndex} deadline={"12, 05, 2018"}/>
 
-                    <button className = "btn btn-danger btn-sm" onClick = {this.handleRemoveTodo.bind(this, index)} > {" "} Delete </button> 
+                        <button className = "btn btn-danger btn-sm" onClick = {this.handleRemoveTodo.bind(this, index)} > {" "} Delete </button> 
                     </div>
                 ))}{this.setTasksPosition()}
                 </div>
@@ -155,6 +155,5 @@ class Planner extends Component {
         );
     }
 }
-
 
 export default Planner;
