@@ -60,7 +60,7 @@ class Planner extends Component {
     
         for ( var i = 0; i < arr1.length; i++ ) {
             for ( var e = 0; e < arr2.length; e++ ) {
-                if ( arr1[i] === arr2[e] ) matches.push( arr1[i] );
+                if ( arr1[i] === arr2[e] ) matches.push(arr1[i]);
             }
         }
         return matches;
@@ -90,33 +90,44 @@ class Planner extends Component {
                 taskArrayStart = tasksArray.map(el => el.getAttribute('data-start'));
                 taskArrayEnd = tasksArray.map(el => el.getAttribute('data-end'));
                 taskArrayDay = tasksArray.map(el => el.getAttribute('data-day'));
-                matchStart = timeSlotContainer.filter(element => taskArrayStart.includes(element));
-                // matchStart = this.getMatch(taskArrayStart, timeSlotContainer);
-                matchEnd = timeSlotContainer.filter(element => taskArrayEnd.includes(element));
-                
-                if(matchStart[0] === undefined) {
-                    matchStart[0] = '09:00';
-                } else {
-                    topPosition = document.querySelector("[data-time=" + CSS.escape(matchStart[0]) + "]").getAttribute('data-time-index');
-                }
-                if(matchEnd[0] === undefined) {
-                    matchEnd[0] = '09:15';
-                } else {
-                    endPosition = document.querySelector("[data-time=" + CSS.escape(matchEnd[0]) + "]").getAttribute('data-time-index');
-                }
-                
-                taskHeight = endPosition - topPosition;
-                elementHeight = taskHeight * timeSlotElementHeight;
-                elementTop = topPosition * timeSlotElementHeight;
-                height.push(elementHeight);
-                top.push(elementTop);
-                console.log(elementTop);
+                // matchStart = timeSlotContainer.filter(element => taskArrayStart.includes(element));
+                matchStart = this.getMatch(taskArrayStart, timeSlotContainer);
+                // matchEnd = timeSlotContainer.filter(element => taskArrayEnd.includes(element));
+                matchEnd = this.getMatch(taskArrayEnd, timeSlotContainer);
+console.log(matchStart);
+
                 tasksArray.forEach(function(val,index) { 
+                    if(matchStart[index] === undefined) {
+                        matchStart[index] = '09:00';
+                    } else {
+                        topPosition = document.querySelector('[data-time=' + CSS.escape(matchStart[index]) + ']').getAttribute('data-time-index');
+                    }
+                    if(matchEnd[index] === undefined) {
+                        matchEnd[index] = '09:15';
+                    } else {
+                        endPosition = document.querySelector('[data-time=' + CSS.escape(matchEnd[index]) + ']').getAttribute('data-time-index');
+                    }
+
+                    if(index === (taskArrayDay.length-1)) {
+                        taskHeight = endPosition - topPosition;
+                        elementHeight = taskHeight * timeSlotElementHeight;
+                        elementTop = topPosition * timeSlotElementHeight;
+                        height.push(elementHeight);
+                        top.push(elementTop);
+                        // console.log(elementTop);
+                        // console.log(matchStart[index]);
+                        // console.log(index)
+                        // console.log("height is " + height)
+                        // console.log("top is " + top);
+                    }
+
                     getTasksColumnPosition = taskArrayDay[index];
-                    if(getTasksColumnPosition === "") {getTasksColumnPosition = '0'}
-                    document.querySelector("[data-column-name=" + CSS.escape(getTasksColumnPosition) + "]").appendChild(val);
-                    val.style.height = height[index] + "px";
-                    val.style.top = top[index] + "px";
+
+                    if(getTasksColumnPosition === '') {getTasksColumnPosition = '0'}
+
+                    document.querySelector('[data-column-name=' + CSS.escape(getTasksColumnPosition) + ']').appendChild(val);
+                    val.style.height = height[index] + 'px';
+                    val.style.top = top[index] + 'px';
                 });  
             }
         }.bind(this), 100)
