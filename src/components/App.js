@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import './App.css';
-import DayGrid from './components/dayGrid';
-import TimeSlotGrid from './components/timeSlotGrid';
-import GridPlanner from './components/gridPlanner';
-import Planner from './components/planner';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import DayGrid from './dayGrid';
+import TimeSlotGrid from './timeSlotGrid';
+import GridPlanner from './gridPlanner';
+import Planner from './planner';
 
 class App extends Component {
 

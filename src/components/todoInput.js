@@ -8,10 +8,10 @@ class TodoInput extends Component {
             todoResponsible: "",
             todoDescription: "",
             todoPriority: "Lowest",
-            todoDays: "",
-            todoDayIndex: "",
-            todoStartTime: "",
-            todosEndTime: ""
+            todoDays: "Monday",
+            todoDayIndex: "0",
+            todoStartTime: "09:00",
+            todosEndTime: "09:15"
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -33,23 +33,51 @@ class TodoInput extends Component {
         });
     }
 
+    checkForTimeCollision = (day,startTime,endTime) => {
+        var checkForTimeCollision = false;
+        let timeCollisionMessage = document.querySelector('.time-collision-warning');
+        let newTaskStartTime = Date.parse('01/01/2018 ' +  startTime + ':00');
+        let newTaskEndTime = Date.parse('01/01/2018 ' +  endTime + ':00');
+
+        this.props.tasks.forEach(function(val) { 
+            if(day === val.todoDays) {
+                var otherTaskStartTime = Date.parse('01/01/2018 ' +  val.todoStartTime + ':00');
+                var otherTaskEndTime = Date.parse('01/01/2018 ' +  val.todosEndTime + ':00');
+
+                if((newTaskStartTime >= otherTaskStartTime && newTaskStartTime < otherTaskEndTime) ||
+                 (newTaskEndTime >= otherTaskStartTime && newTaskEndTime < otherTaskEndTime) ||
+                startTime === endTime) {
+                    checkForTimeCollision = true;
+                    if(timeCollisionMessage.classList.contains('show') !== true) {
+                        setTimeout(() => {
+                            timeCollisionMessage.classList.toggle('show');
+                        }, 5000);
+                        timeCollisionMessage.classList.toggle('show');
+                    }
+                }
+            }
+        });
+        return checkForTimeCollision;
+    }
+
     handleSubmit = (event) => {
         event.preventDefault();
         if (
             this.state.todoTitle !== "" &&
             this.state.todoResponsible !== "" &&
-            this.state.todoDescription !== ""
-        ) {
+            this.state.todoDescription !== "" &&
+            this.checkForTimeCollision(this.state.todoDays, this.state.todoStartTime, this.state.todosEndTime) !== true) {
+
             this.props.onAddTodo(this.state);
             this.setState({
                 todoTitle: "",
                 todoResponsible: "",
                 todoDescription: "",
                 todoPriority: "Lowest",
-                todoDays: "",
-                todoDayIndex: "",
-                todoStartTime: "",
-                todosEndTime: ""
+                todoDays: "Monday",
+                todoDayIndex: "0",
+                todoStartTime: "09:00",
+                todosEndTime: "09:15"
             });
         }
     }
@@ -140,6 +168,10 @@ class TodoInput extends Component {
                                         <option key = {index}>{index}</option>)}
                                 </select>
                             </div>
+                        </div>
+
+                        <div className="time-collision-warning">
+                            <span className="time-collision-warning-text">The set duration for this task is already booked or overlapping.Please select different time!</span>
                         </div>
 
                         <div className = "form-group" >

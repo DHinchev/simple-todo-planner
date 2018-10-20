@@ -139,7 +139,7 @@ body {
 
 .columns .list-group-item.task {
   position: absolute;
-  width: fill-available;
+  width: 100%;
   color: #ffffff;
   background-color: #3b72cc;
   border: 2px solid #000000;
@@ -228,4 +228,19 @@ body {
 .list-group-item.open .clock-details {
   display: flex;
   margin-bottom: 15px;
+}
+
+.time-collision-warning {
+  display: none;
+}
+
+.time-collision-warning.show {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.time-collision-warning-text {
+  color: #ff0000;
+  font-weight: 500;
+  padding-left: 15px;
 }
