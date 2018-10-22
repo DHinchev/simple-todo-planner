@@ -13,8 +13,7 @@ class Planner extends Component {
 
         this.state = {
             todos: [],
-            popupVisible: false,
-            todoHeights: []
+            popupVisible: false
         };
 
         this.handleAddTodo = this.handleAddTodo.bind(this);
@@ -43,6 +42,10 @@ class Planner extends Component {
     }
 
     openTaskDetails = (event) => {
+        const checkIfLastColumn = event.target.parentNode.parentNode.dataset.columnName;
+        if(checkIfLastColumn === '6') {
+            event.target.parentNode.style.right = '0px'
+        }
         event.target.parentNode.classList.add('open');
         event.target.parentNode.style.height = 'auto';
     }
@@ -51,6 +54,11 @@ class Planner extends Component {
         event.target.parentNode.classList.remove('open');
         const indexOfHeightArray = event.target.dataset.closeIndex;
         event.target.parentNode.style.height = taskHeightArray[indexOfHeightArray] + 'px';
+
+        const checkIfLastColumn = event.target.parentNode.parentNode.dataset.columnName;
+        if(checkIfLastColumn === '6') {
+            event.target.parentNode.style.right = 'auto'
+        }
     }
 
     closeTodoContainer = () => {
@@ -99,16 +107,8 @@ class Planner extends Component {
 console.log(matchStart);
 
                 tasksArray.forEach(function(val,index) { 
-                    if(matchStart[index] === undefined) {
-                        matchStart[index] = '09:00';
-                    } else {
-                        topPosition = document.querySelector('[data-time=' + CSS.escape(matchStart[index]) + ']').getAttribute('data-time-index');
-                    }
-                    if(matchEnd[index] === undefined) {
-                        matchEnd[index] = '09:15';
-                    } else {
-                        endPosition = document.querySelector('[data-time=' + CSS.escape(matchEnd[index]) + ']').getAttribute('data-time-index');
-                    }
+                    topPosition = document.querySelector('[data-time=' + CSS.escape(matchStart[index]) + ']').getAttribute('data-time-index');
+                    endPosition = document.querySelector('[data-time=' + CSS.escape(matchEnd[index]) + ']').getAttribute('data-time-index');
 
                     if(index === (taskArrayDay.length-1)) {
                         elementHeight = (endPosition - topPosition) * timeSlotElementHeight;
@@ -118,8 +118,6 @@ console.log(matchStart);
                     }
 
                     getTasksColumnPosition = taskArrayDay[index];
-
-                    if(getTasksColumnPosition === '') {getTasksColumnPosition = '0'}
                     document.querySelector('[data-column-name=' + CSS.escape(getTasksColumnPosition) + ']').appendChild(val);
                     val.style.height = taskHeightArray[index] + 'px';
                     val.style.top = taskTopArray[index] + 'px';
@@ -153,7 +151,7 @@ console.log(matchStart);
                         <p className="list-group-item-description">{todo.todoDescription}</p>
                         <Clock startTime={todo.todoStartTime} endTime={todo.todosEndTime} dayOfWeek={todo.todoDays}  dayIndex={todo.todoDayIndex}/>
                     
-                        <button className = "btn btn-danger btn-sm" onClick = {this.handleRemoveTodo.bind(this, index)}> Delete </button> 
+                        <button className = "btn btn-danger btn-sm" onClick = {() => this.handleRemoveTodo(index)}> Delete </button> 
                     </div>
                 ))}{this.setTasksPosition()}
                 </div>
