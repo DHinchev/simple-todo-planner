@@ -22,24 +22,29 @@ class App extends Component {
   }
  
   openTodoContainer = () => {
-    const todoContainer = document.querySelector('.container');
+    const todoContainer = document.querySelector('.container-todo');
     todoContainer.classList.add('open');
 }
 
   render() {
     return (
       <div className="App">
-        <div className="gridTimes">
+        <div className="menu-organiser">
+          <button className="createTask" onClick={this.openTodoContainer}> Create new task</button>
+        </div>
+        <div className="todo-count-tasks">
+          <h4>
+            Todo Count: <span> {JSON.parse(localStorage.getItem('todosLength')) || 0} </span>
+          </h4>
+        </div>
+        <div className="grid-times">
           <TimeSlotGrid setParentState={this.setState.bind(this)} />
-          <div className="gridDays">
+          <div className="grid-days">
             <DayGrid setParentState={this.setState.bind(this)} />
             <GridPlanner horizontal={this.state.dayList} vertical={this.state.timesList} tasks={this.state.todos}/>
           </div>
         </div>
-        <div className="menuOrganiser">
-          <button className="createTask" onClick={this.openTodoContainer}>+</button>
-        </div>
-        <div className="menuPlanner">{this.state.todos.todoStartTime}
+        <div className="menu-planner">{this.state.todos.todoStartTime}
           <Planner horizontal={this.state.dayList} vertical={this.state.timesList} setParentState={this.handleTasks} />
         </div>
       </div>

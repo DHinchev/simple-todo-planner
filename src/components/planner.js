@@ -6,14 +6,14 @@ import Plus from '../assets/plus.svg';
 
 var taskHeightArray= [];
 var taskTopArray= [];
+var checkForPageReload = true;
 
 class Planner extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            todos: [],
-            popupVisible: false
+            todos: JSON.parse(localStorage.getItem('todos')) || []
         };
 
         this.handleAddTodo = this.handleAddTodo.bind(this);
@@ -24,13 +24,16 @@ class Planner extends Component {
 
 
     handleAddTodo = (todo) => {
-        this.setState({
-            todos: [...this.state.todos, todo],
-        });
-
         var temp = [...this.state.todos];
         temp.push(todo);
         this.props.setParentState({todo: temp});
+        this.setState({
+            todos: [...this.state.todos, todo]
+        },() => {
+            localStorage.setItem('todos', JSON.stringify(this.state.todos));
+            localStorage.setItem('todosLength', JSON.stringify(this.state.todos.length + 1));
+            checkForPageReload = false;
+          });
     }
 
     handleRemoveTodo = (index) => {
@@ -62,11 +65,11 @@ class Planner extends Component {
     }
 
     closeTodoContainer = () => {
-        const container = document.querySelector('.container');
+        const container = document.querySelector('.container-todo');
         container.classList.remove('open');
     }
 
-    getMatch(arr1, arr2) {
+    getMatch = (arr1, arr2) => {
         var matches = [];
     
         for ( var i = 0; i < arr1.length; i++ ) {
@@ -78,7 +81,6 @@ class Planner extends Component {
     }
 
     setTasksPosition = () => {
-        setTimeout(function() { 
             let topPosition;
             let endPosition;
             let taskArrayStart;
@@ -110,12 +112,20 @@ console.log(matchStart);
                     topPosition = document.querySelector('[data-time=' + CSS.escape(matchStart[index]) + ']').getAttribute('data-time-index');
                     endPosition = document.querySelector('[data-time=' + CSS.escape(matchEnd[index]) + ']').getAttribute('data-time-index');
 
-                    if(index === (taskArrayDay.length-1)) {
+                    if(index === (taskArrayDay.length-1) && checkForPageReload === false) {
+                        elementHeight = (endPosition - topPosition) * timeSlotElementHeight;
+                        elementTop = topPosition * timeSlotElementHeight;
+                        taskHeightArray.push(elementHeight);
+                        taskTopArray.push(elementTop);
+                    } 
+                    if( checkForPageReload === true) {
                         elementHeight = (endPosition - topPosition) * timeSlotElementHeight;
                         elementTop = topPosition * timeSlotElementHeight;
                         taskHeightArray.push(elementHeight);
                         taskTopArray.push(elementTop);
                     }
+
+                    console.log(taskHeightArray);
 
                     getTasksColumnPosition = taskArrayDay[index];
                     document.querySelector('[data-column-name=' + CSS.escape(getTasksColumnPosition) + ']').appendChild(val);
@@ -123,39 +133,39 @@ console.log(matchStart);
                     val.style.top = taskTopArray[index] + 'px';
                 });  
             }
-        }.bind(this), 100);
+            checkForPageReload = false;
+    }
+
+    componentDidUpdate () {
+        this.setTasksPosition();
     }
 
     render() {
         return ( 
-            <div className ="container">
+            <div className ="container-todo">
             <img src={Close} className="close-icon" width="35px" height="35px" alt="close icon" onClick={this.closeTodoContainer}/>
             <TodoInput days = {this.props.horizontal} timeSlots = {this.props.vertical}
             onAddTodo = {this.handleAddTodo} tasks={this.state.todos}/>
-            <hr/>
-                <h4>
-                    Todo Count: <span className = "badge" > {this.state.todos.length} </span>
-                </h4>
                 <div className="list-group">
-                {this.state.todos.map((todo, index) => (
-                    <div className = "list-group-item task" key = {index} data-start={todo.todoStartTime} data-end={todo.todosEndTime} data-day={todo.todoDayIndex}>
-                        <img src={Plus} className="plus-icon-task" width="25px" height="25px" alt="plus icon for task" onClick={this.openTaskDetails}/>
-                        <img src={Close} className="close-icon-task" width="35px" height="35px" alt="close icon for task" data-close-index={index} onClick={this.closeTaskDetails}/>
-                        <h4 className = "list-group-item-heading" > 
-                            {todo.todoTitle} { " " } 
-                            <span className = "label label-info" > 
-                                {todo.todoPriority}
-                            </span>
-                        </h4>
-                        <p className="list-group-item-responsible">{todo.todoResponsible}</p> 
-                        <p className="list-group-item-description">{todo.todoDescription}</p>
-                        <Clock startTime={todo.todoStartTime} endTime={todo.todosEndTime} dayOfWeek={todo.todoDays}  dayIndex={todo.todoDayIndex}/>
-                    
-                        <button className = "btn btn-danger btn-sm" onClick = {() => this.handleRemoveTodo(index)}> Delete </button> 
-                    </div>
-                ))}{this.setTasksPosition()}
+                    {this.state.todos.map((todo, index) => (
+                        <div className = "list-group-item task" key = {index} data-start={todo.todoStartTime} data-end={todo.todosEndTime} data-day={todo.todoDayIndex}>
+                            <img src={Plus} className="plus-icon-task" width="25px" height="25px" alt="plus icon for task" onClick={this.openTaskDetails}/>
+                            <img src={Close} className="close-icon-task" width="35px" height="35px" alt="close icon for task" data-close-index={index} onClick={this.closeTaskDetails}/>
+                            <h4 className = "list-group-item-heading" > 
+                                {todo.todoTitle} { " " } 
+                                <span className = "label label-info" > 
+                                    {todo.todoPriority}
+                                </span>
+                            </h4>
+                            <p className="list-group-item-responsible">{todo.todoResponsible}</p> 
+                            <p className="list-group-item-description">{todo.todoDescription}</p>
+                            <Clock startTime={todo.todoStartTime} endTime={todo.todosEndTime} dayOfWeek={todo.todoDays}  dayIndex={todo.todoDayIndex}/>
+                        
+                            <button className = "btn btn-danger btn-sm" onClick = {() => this.handleRemoveTodo(index)}> Delete </button> 
+                        </div>
+                    ))}
                 </div>
-                <hr/>
+            <hr/>
             </div>
         );
     }

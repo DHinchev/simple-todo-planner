@@ -5,12 +5,11 @@ class DayGrid extends Component {
     super(props);
     this.state = {
       days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-  
     }
   }
 
   componentDidMount() {
-    document.getElementsByClassName('dayGrid')[0].click();
+    document.getElementsByClassName('day-grid')[0].click();
   }
 
   propagateToParent(e){
@@ -20,7 +19,7 @@ class DayGrid extends Component {
 
   render() {
     return (
-      <div className="dayGrid" onClick={this.propagateToParent.bind(this)}>
+      <div className="day-grid" onClick={this.propagateToParent.bind(this)}>
         <ul>
           {this.state.days.map(index => <Days key={index} weekDays={index} />)}
         </ul>

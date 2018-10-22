@@ -13,7 +13,7 @@ class TimeSlotGrid extends Component {
     time: intervals
   }));
 
-  document.getElementsByClassName('timeSlotGrid')[0].click();
+  document.getElementsByClassName('time-slot-grid')[0].click();
 }
 
   propagateToParent(e){
@@ -23,7 +23,7 @@ class TimeSlotGrid extends Component {
 
   render() {
     return (
-      <div className="timeSlotGrid" onClick={this.propagateToParent.bind(this)}>
+      <div className="time-slot-grid" onClick={this.propagateToParent.bind(this)}>
         <ul>
           <li className="time-unit">Time</li>
           {this.state.time.map((val, index) =>  <TimeSlots key={index} time={val} timeIndex={index}/>)}
