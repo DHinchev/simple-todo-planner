@@ -1,25 +1,23 @@
 import React, { Component } from 'react';
 
 class DayGrid extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-    }
+
+  state = {
+    days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
   }
 
   componentDidMount() {
-    document.getElementsByClassName('day-grid')[0].click();
+    this.propagateToParent();
   }
 
-  propagateToParent(e){
-    e.preventDefault();
+  propagateToParent = () =>{
     this.props.setParentState({ dayList: this.state.days});
   }
 
   render() {
+    const Days = (props) => <li className="day-unit">{props.weekDays}</li>
     return (
-      <div className="day-grid" onClick={this.propagateToParent.bind(this)}>
+      <div className="day-grid">
         <ul>
           {this.state.days.map(index => <Days key={index} weekDays={index} />)}
         </ul>
@@ -27,7 +25,5 @@ class DayGrid extends Component {
     );
   }
 }
-
-const Days = (props) => <li className="day-unit">{props.weekDays}</li>
 
 export default DayGrid;

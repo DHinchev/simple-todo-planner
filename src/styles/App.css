@@ -10,6 +10,7 @@ body {
   display: flex;
   width: 100%;
   margin-bottom: 0;
+  padding-left: 0;
   justify-content: center;
 }
 
@@ -145,7 +146,7 @@ body {
   border: 2px solid #000000;
 }
 
-.createTask {
+.create-task {
   width: auto;
   font-size: 16px;
   font-weight: 500;
@@ -192,7 +193,7 @@ body {
   margin-right: 25px;
 }
 
-.menu-organiser {
+.menu-organizer {
   width: 20%;
   display: inline-block;
 }

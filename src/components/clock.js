@@ -1,21 +1,20 @@
 import React, {Component} from 'react';
 
 class Clock extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            days: 0,
-            hours: 0,
-            minutes: 0,
-            seconds: 0,
-            time: 0
-        };
-    }
-    componentWillMount() {
+    state = {
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        time: 0
+    };
+
+    componentWillMount = () => {
         this.getTimeUntil();
     }
-    componentDidMount() {
-        let deadline = this.getTime();
+
+    componentDidMount = () => {
+        const deadline = this.getTime();
         this.setState({
             time: deadline
         });
@@ -24,44 +23,33 @@ class Clock extends Component {
         }, 1000);
     }
 
-    zeroingTime(num) {
+    zeroingTime = num => {
         return num < 10 ? "0" + num : num;
     }
 
-    getTime() {
-        const firstDayOfWeek = new Date();
+    getTime = () => {
+        const { startTime, endTime, dayOfWeek, dayIndex } = this.props;
 
-        const day = firstDayOfWeek.getDay();
-        const dayDiff = firstDayOfWeek.getDate() - day + (day === 0 ? -6 : 1);
-        const monday = new Date(firstDayOfWeek.setDate(dayDiff)).toString().substring(8, 10);
-
+        const getNewTime = new Date();
+        const dayInNumeral = getNewTime.getDay();
+        const dayDiff = getNewTime.getDate() - dayInNumeral + (dayInNumeral === 0 ? -6 : 1);
+        const monday = new Date(getNewTime.setDate(dayDiff)).toString().substring(8, 10);
         const presentDay = new Date();
-        // get selected day
-        var weekDay = this.props.dayOfWeek.substring(0, 3);
-        var weekDayFormat = Number.parseInt(monday,10) + this.props.dayIndex;
-
-        // get current month number in mm format
-        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        const currentMonth = monthNames[presentDay.getMonth()];
-
-        // get current year
+        var weekDayInShortName= dayOfWeek.substring(0, 3);
+        var weekDayFormat = Number.parseInt(monday,10) + dayIndex;
+        const monthsNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const currentMonth = monthsNames[presentDay.getMonth()];
         const currentYear = presentDay.getFullYear();
-
-        // get star hour
-        let startHour = (this.props.startTime.length) ? this.props.startTime + ':00' : '09:00:00';
-        
-        // get final hour
-        let endHour = (this.props.endTime.length) ? this.props.endTime + ':00' : '09:00:00';
-        
-
-        const end = Date.parse(new Date(weekDay + " " + currentMonth + " " + weekDayFormat + " " + currentYear + " " + endHour + " GMT+0200 (Eastern European Standard Time)"));
-        const start = Date.parse(new Date(weekDay + " " + currentMonth + " " + weekDayFormat + " " + currentYear + " " + startHour + " GMT+0200 (Eastern European Standard Time)"));
+        const startHour = (startTime.length) ? startTime + ':00' : '09:00:00';
+        const endHour = (endTime.length) ? endTime + ':00' : '09:00:00';
+        const end = Date.parse(new Date(weekDayInShortName + " " + currentMonth + " " + weekDayFormat + " " + currentYear + " " + endHour + " GMT+0200 (Eastern European Standard Time)"));
+        const start = Date.parse(new Date(weekDayInShortName + " " + currentMonth + " " + weekDayFormat + " " + currentYear + " " + startHour + " GMT+0200 (Eastern European Standard Time)"));
         const time = ((end - start) + (start - Date.parse(presentDay)));
 
         return time;
     }
 
-    getTimeUntil(deadline) {
+    getTimeUntil = deadline => {
         var temp = deadline;
 
         if (temp < 0) {
@@ -90,19 +78,20 @@ class Clock extends Component {
         }
     }
     render() {
+        const { days, hours, minutes, seconds } = this.state;
         return (
             <div className="clock-details">
-                <div className = "Clock-days" >
-                    {this.zeroingTime(this.state.days)} Day
+                <div className = "clock-days" >
+                    {this.zeroingTime(days)} Day
                 </div>
-                <div className = "Clock-hours" >
-                    {this.zeroingTime(this.state.hours)} Hours
+                <div className = "clock-hours" >
+                    {this.zeroingTime(hours)} Hours
                 </div>
-                <div className = "Clock-minutes" >
-                    {this.zeroingTime(this.state.minutes)} Minutes
+                <div className = "clock-minutes" >
+                    {this.zeroingTime(minutes)} Minutes
                 </div>
-                <div className = "Clock-seconds" >
-                    {this.zeroingTime(this.state.seconds)} Seconds
+                <div className = "clock-seconds" >
+                    {this.zeroingTime(seconds)} Seconds
                 </div>
             </div>
         );

@@ -5,32 +5,42 @@ import GridPlanner from './gridPlanner';
 import Planner from './planner';
 
 class App extends Component {
-
-    constructor() {
-      super();
-      this.state = {
-        timesList: [],
-        dayList: [],
-        todos: [],
-        daysNum: '',
-        timeSlotLength: ''
-      }
-    }
+  state = {
+    timesList: [],
+    dayList: [],
+    todos: JSON.parse(localStorage.getItem('todos')) || [],
+    daysNum: '',
+    timeSlotLength: '',
+    openPlanner: false,
+  };
 
   handleTasks = (value) => {
-      this.setState({todos: value});
+    localStorage.setItem('todos', JSON.stringify(value));
+    localStorage.setItem('todosLength', JSON.stringify(value.length));
+
+    this.setState({ todos: JSON.parse(localStorage.getItem('todos'))});
   }
- 
-  openTodoContainer = () => {
-    const todoContainer = document.querySelector('.container-todo');
-    todoContainer.classList.add('open');
-}
+
+  openPlanner = () => {
+    this.setState({ openPlanner: true });
+  }
+
+  closePlanner = () => {
+    this.setState({ openPlanner: false });
+  }
 
   render() {
+    const { openPlanner, dayList, timesList, todos } = this.state;
+
     return (
       <div className="App">
-        <div className="menu-organiser">
-          <button className="createTask" onClick={this.openTodoContainer}> Create new task</button>
+        <div className="menu-organizer">
+          <button
+            className="create-task"
+            onClick={this.openPlanner}
+          >
+            Create new task
+          </button>
         </div>
         <div className="todo-count-tasks">
           <h4>
@@ -41,11 +51,23 @@ class App extends Component {
           <TimeSlotGrid setParentState={this.setState.bind(this)} />
           <div className="grid-days">
             <DayGrid setParentState={this.setState.bind(this)} />
-            <GridPlanner horizontal={this.state.dayList} vertical={this.state.timesList} tasks={this.state.todos}/>
+            <GridPlanner
+              horizontal={dayList}
+              vertical={timesList}
+              tasks={todos}
+            />
           </div>
         </div>
-        <div className="menu-planner">{this.state.todos.todoStartTime}
-          <Planner horizontal={this.state.dayList} vertical={this.state.timesList} setParentState={this.handleTasks} />
+        <div className="menu-planner">
+          {todos.todoStartTime}
+          <Planner
+            todos={todos}
+            open={openPlanner}
+            closePlanner={this.closePlanner}
+            horizontal={dayList}
+            vertical={timesList}
+            setParentState={this.handleTasks}
+          />
         </div>
       </div>
     );
