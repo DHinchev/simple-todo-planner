@@ -9,7 +9,8 @@ class TodoModal extends Component {
         todoDay: "Monday",
         todoDayIndex: "0",
         todoStartTime: "09:00",
-        todoEndTime: "09:15"
+        todoEndTime: "09:15",
+        timeCollisionMessage: 'The set duration for this task is already booked or overlapping.Please select different time!'
     };
 
     handleInputChange = (event) => {
@@ -43,8 +44,8 @@ class TodoModal extends Component {
                 const otherTodoEndTime = Date.parse('01/01/2018 ' + todo.todoEndTime + ':00');
                 const startTimeCollision = newTodoStartTime >= otherTodoStartTime && newTodoStartTime < otherTodoEndTime;
                 const endTimeCollision = newTodoEndTime >= otherTodoStartTime && newTodoEndTime < otherTodoEndTime;
-
-                if (startTimeCollision || endTimeCollision || todoStartTime === todoEndTime) {
+                const checkEndTimeStartTime = newTodoStartTime >= newTodoEndTime
+                if (startTimeCollision || endTimeCollision || checkEndTimeStartTime || todoStartTime === todoEndTime) {
                     checkForTimeCollision = true;
                 }
             }
@@ -61,21 +62,21 @@ class TodoModal extends Component {
         if (!hasTimeCollision) {
             this.props.onAddTodo(this.state, () => {
                 this.setState({
-                    todoTitle: "",
-                    todoPersonResponsible: "",
-                    todoDescription: "",
-                    todoPriority: "Lowest",
-                    todoDay: "Monday",
-                    todoDayIndex: "0",
-                    todoStartTime: "09:00",
-                    todoEndTime: "09:15"
+                    todoTitle: '',
+                    todoPersonResponsible: '',
+                    todoDescription: '',
+                    todoPriority: 'Lowest',
+                    todoDay: 'Monday',
+                    todoDayIndex: '0',
+                    todoStartTime: '09:00',
+                    todoEndTime: '09:15'
                 });
             });
         }
     }
 
     render() {
-        const { todoTitle, todoPersonResponsible, todoDescription, todoPriority, todoDay, todoStartTime, todoEndTime } = this.state;
+        const { todoTitle, todoPersonResponsible, todoDescription, todoPriority, todoDay, todoStartTime, todoEndTime, timeCollisionMessage } = this.state;
 
         return (
             <div>
@@ -247,7 +248,7 @@ class TodoModal extends Component {
 
                     <div className="time-collision-warning">
                         <span className="time-collision-warning-text">
-                            The set duration for this task is already booked or overlapping.Please select different time!
+                            {timeCollisionMessage}
                         </span>
                     </div>
 

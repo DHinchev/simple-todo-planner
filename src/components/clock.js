@@ -35,8 +35,8 @@ class Clock extends Component {
         const dayDiff = getNewTime.getDate() - dayInNumeral + (dayInNumeral === 0 ? -6 : 1);
         const monday = new Date(getNewTime.setDate(dayDiff)).toString().substring(8, 10);
         const presentDay = new Date();
-        var weekDayInShortName= dayOfWeek.substring(0, 3);
-        var weekDayFormat = Number.parseInt(monday,10) + dayIndex;
+        let weekDayInShortName= dayOfWeek.substring(0, 3);
+        let weekDayFormat = Number.parseInt(monday,10) + dayIndex;
         const monthsNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         const currentMonth = monthsNames[presentDay.getMonth()];
         const currentYear = presentDay.getFullYear();
