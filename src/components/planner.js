@@ -136,7 +136,7 @@ class Planner extends Component {
                 />
                 <div className="list-group">
                     {todos.map((todo, index) => (
-                        <div className="list-group-item task" key={index} data-start={todo.todoStartTime} data-end={todo.todoEndTime} data-day={todo.todoDayIndex}>
+                        <div className="list-group-item task" key={todo.todoTitle} data-start={todo.todoStartTime} data-end={todo.todoEndTime} data-day={todo.todoDayIndex}>
                             <img src={Plus} 
                                 className="plus-icon-task"
                                 width="25px" height="25px"
