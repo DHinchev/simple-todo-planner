@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import DayGrid from './dayGrid';
-import TimeSlotGrid from './timeSlotGrid';
+import TimeSlotGrid from './time-slots';
 import GridPlanner from './gridPlanner';
 import Planner from './planner';
 
@@ -12,9 +12,10 @@ class App extends Component {
     daysNum: '',
     timeSlotLength: '',
     openPlanner: false,
+    days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
   };
 
-  handleTasks = (value) => {
+  storeTodos = (value) => {
     localStorage.setItem('todos', JSON.stringify(value));
     localStorage.setItem('todosLength', JSON.stringify(value.length));
 
@@ -30,7 +31,7 @@ class App extends Component {
   }
 
   render() {
-    const { openPlanner, dayList, timesList, todos } = this.state;
+    const { openPlanner, dayList, timesList, todos, days } = this.state;
 
     return (
       <div className="App">
@@ -44,13 +45,13 @@ class App extends Component {
         </div>
         <div className="todo-count-tasks">
           <h4>
-            Todo Count: <span> {JSON.parse(localStorage.getItem('todosLength')) || 0} </span>
+            Todo Count: <span> {todos.length} </span>
           </h4>
         </div>
         <div className="grid-times">
-          <TimeSlotGrid setParentState={this.setState.bind(this)} />
+          <TimeSlotGrid/>
           <div className="grid-days">
-            <DayGrid setParentState={this.setState.bind(this)} />
+            <DayGrid days={days}/>
             <GridPlanner
               horizontal={dayList}
               vertical={timesList}
@@ -66,7 +67,7 @@ class App extends Component {
             closePlanner={this.closePlanner}
             horizontal={dayList}
             vertical={timesList}
-            setParentState={this.handleTasks}
+            setParentState={this.storeTodos}
           />
         </div>
       </div>
