@@ -3,12 +3,12 @@ import React, { Component } from 'react';
 class GridPlanner extends Component {
 
   render() {
-    const {horizontal, vertical} = this.props;
+    const {timeSlotRows, dayColumns} = this.props;
     return (
       <div className="grid-planner">
-          {horizontal.map((val,indexColumn) => 
+          {timeSlotRows.map((val,indexColumn) => 
             <div className="columns" key={val} data-column-name={indexColumn}>
-              {vertical.map(indexRow => <div className="rows" key={indexRow}></div>)}
+              {dayColumns.map(indexRow => <div className="rows" key={indexRow}></div>)}
             </div>)}   
       </div>
     );

@@ -10,6 +10,7 @@ class TodoModal extends Component {
         todoDayIndex: "0",
         todoStartTime: "09:00",
         todoEndTime: "09:15",
+        todoId: "0",
         timeCollisionMessage: 'The set duration for this task is already booked or overlapping.Please select different time!'
     };
 
@@ -26,7 +27,7 @@ class TodoModal extends Component {
             return;
         }
 
-        this.setState({ [name]: value });
+        this.setState({ [name]: value});
     }
 
     checkForTimeCollision = () => {
@@ -52,13 +53,13 @@ class TodoModal extends Component {
         });
 
         return checkForTimeCollision;
-    }
+    } 
 
     handleSubmit = (event) => {
         event.preventDefault();
 
         const hasTimeCollision = this.checkForTimeCollision();
-
+        
         if (!hasTimeCollision) {
             this.props.onAddTodo(this.state, () => {
                 this.setState({

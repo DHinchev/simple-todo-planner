@@ -11,11 +11,14 @@ var checkForPageReload = true;
 class Planner extends Component {
     constructor(props) {
         super(props);
+
         this.handleAddTodo = this.handleAddTodo.bind(this);
     }
 
     componentDidUpdate() {
-        this.setTasksPosition();
+        if(this.props.todos.length > taskHeightArray.length) {
+            this.setTasksPosition();
+        }
     }
 
     handleAddTodo = (todo, cb) => {
@@ -72,7 +75,7 @@ class Planner extends Component {
         let elementHeight;
         let elementTop;
         let timeSlotElementHeight;
-
+        
         if (this.props.todos.length) {
             tasksArray = [...document.querySelectorAll('.list-group-item')];
             timeSlotContainer = [...document.querySelectorAll('[data-time]')].map(el => el.getAttribute('data-time'));
@@ -96,6 +99,7 @@ class Planner extends Component {
                     taskHeightArray.push(elementHeight);
                     taskTopArray.push(elementTop);
                 }
+
                 if (checkForPageReload === true) {
                     elementHeight = (endPosition - topPosition) * timeSlotElementHeight;
                     elementTop = topPosition * timeSlotElementHeight;
@@ -107,13 +111,14 @@ class Planner extends Component {
                 document.querySelector('[data-column-name=' + CSS.escape(getTasksColumnPosition) + ']').appendChild(val);
                 val.style.height = taskHeightArray[index] + 'px';
                 val.style.top = taskTopArray[index] + 'px';
+                console.log(taskHeightArray);
             });
         }
         checkForPageReload = false;
     }
 
     render() {
-        const { open, closePlanner, todos } = this.props;
+        const { open, closePlanner, todos, dayColumns, timeSlotRows } = this.props;
 
         const defaultClassName = 'container-todo';
         const className = open ? `${defaultClassName} open` : defaultClassName;
@@ -129,14 +134,19 @@ class Planner extends Component {
                     onClick={closePlanner}
                 />
                 <TodoModal
-                    days={this.props.horizontal}
-                    timeSlots={this.props.vertical}
+                    days={timeSlotRows}
+                    timeSlots={dayColumns}
                     onAddTodo={this.handleAddTodo}
                     todos={todos}
                 />
                 <div className="list-group">
                     {todos.map((todo, index) => (
-                        <div className="list-group-item task" key={todo.todoTitle} data-start={todo.todoStartTime} data-end={todo.todoEndTime} data-day={todo.todoDayIndex}>
+                        <div className="list-group-item task"
+                            key={todo.todoTitle}
+                            data-start={todo.todoStartTime}
+                            data-end={todo.todoEndTime}
+                            data-day={todo.todoDayIndex}
+                        >
                             <img src={Plus} 
                                 className="plus-icon-task"
                                 width="25px" height="25px"
@@ -156,9 +166,12 @@ class Planner extends Component {
                                     {todo.todoPriority}
                                 </span>
                             </h4>
-                            <p className="list-group-item-responsible">{todo.todoResponsible}</p>
-                            <p className="list-group-item-description">{todo.todoDescription}</p>
-                            {todo.todoDay}
+                            <p className="list-group-item-responsible">
+                                {todo.todoResponsible}
+                            </p>
+                            <p className="list-group-item-description">
+                                {todo.todoDescription}
+                            </p>
                             <Clock
                                 startTime={todo.todoStartTime}
                                 endTime={todo.todoEndTime}
