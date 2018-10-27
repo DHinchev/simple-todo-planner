@@ -11,7 +11,6 @@ class TodoModal extends Component {
         todoStartTime: "09:00",
         todoEndTime: "09:15",
         todoId: "0",
-        timeCollisionMessage: 'The set duration for this task is already booked or overlapping.Please select different time!'
     };
 
     handleInputChange = (event) => {
@@ -73,11 +72,21 @@ class TodoModal extends Component {
                     todoEndTime: '09:15'
                 });
             });
+        } else {
+            this.showWarningMessagte();
         }
     }
 
+    showWarningMessagte = () => {
+        const defaultClassName = 'time-collision-warning';
+        document.getElementsByClassName(defaultClassName)[0].classList.add('show');
+        setTimeout(function () {
+            document.getElementsByClassName(defaultClassName)[0].classList.remove('show');;
+        }, 3000);
+    }
+
     render() {
-        const { todoTitle, todoPersonResponsible, todoDescription, todoPriority, todoDay, todoStartTime, todoEndTime, timeCollisionMessage } = this.state;
+        const { todoTitle, todoPersonResponsible, todoDescription, todoPriority, todoDay, todoStartTime, todoEndTime } = this.state;
 
         return (
             <div>
@@ -234,7 +243,7 @@ class TodoModal extends Component {
                                 id="inputtodosEndTime"
                                 value={todoEndTime}
                                 onChange={this.handleInputChange}
-                                placeholder="Year Remaining"
+                                placeholder="Time Remaining"
                             >
                                 {
                                     this.props.timeSlots.map(index => (
@@ -249,13 +258,13 @@ class TodoModal extends Component {
 
                     <div className="time-collision-warning">
                         <span className="time-collision-warning-text">
-                            {timeCollisionMessage}
+                            The set duration for this task is already booked or overlapping.Please select different time!
                         </span>
                     </div>
 
                     <div className="form-group" >
                         <div className="col-sm-offset-2 col-sm-10" >
-                            <button type="submit" className="btn btn-success">Add Todo</button>
+                            <button type="submit" className="btn btn-success" onClick={this.handleSubmit}>Add Todo</button>
                         </div>
                     </div>
                 </form>

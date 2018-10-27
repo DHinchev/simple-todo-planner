@@ -111,7 +111,6 @@ class Planner extends Component {
                 document.querySelector('[data-column-name=' + CSS.escape(getTasksColumnPosition) + ']').appendChild(val);
                 val.style.height = taskHeightArray[index] + 'px';
                 val.style.top = taskTopArray[index] + 'px';
-                console.log(taskHeightArray);
             });
         }
         checkForPageReload = false;
