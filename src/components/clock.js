@@ -15,10 +15,12 @@ class Clock extends Component {
 
     componentDidMount = () => {
         const deadline = this.getTime();
+        
         this.setState({
             time: deadline
         });
-        setInterval(() => {
+
+        this.timer = setInterval(() => {
             this.getTimeUntil(this.state.time)
         }, 1000);
     }
@@ -27,25 +29,40 @@ class Clock extends Component {
         return num < 10 ? "0" + num : num;
     }
 
+    daysInMonth = (month, year) => {
+        return new Date(year, month, 0).getDate();
+    }
+
+    componentWillUnmount(){
+        window.clearInterval(this.timer);
+    }
+
     getTime = () => {
         const { startTime, endTime, dayOfWeek, dayIndex } = this.props;
 
+        const monthsNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         const getNewTime = new Date();
         const dayInNumeral = getNewTime.getDay();
         const dayDiff = getNewTime.getDate() - dayInNumeral + (dayInNumeral === 0 ? -6 : 1);
         const monday = new Date(getNewTime.setDate(dayDiff)).toString().substring(8, 10);
         const presentDay = new Date();
         let weekDayInShortName= dayOfWeek.substring(0, 3);
+        const getCurrentMonthTotalDays = this.daysInMonth(presentDay.getMonth()+1,presentDay.getFullYear())
         let weekDayFormat = Number.parseInt(monday,10) + dayIndex;
-        const monthsNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        const currentMonth = monthsNames[presentDay.getMonth()];
+        let currentMonth = monthsNames[presentDay.getMonth()];
+
+        if(weekDayFormat > getCurrentMonthTotalDays) {
+            weekDayFormat = weekDayFormat - getCurrentMonthTotalDays;
+            currentMonth = monthsNames[presentDay.getMonth()+1];
+        }
+        
         const currentYear = presentDay.getFullYear();
         const startHour = (startTime.length) ? startTime + ':00' : '09:00:00';
         const endHour = (endTime.length) ? endTime + ':00' : '09:00:00';
         const end = Date.parse(new Date(weekDayInShortName + " " + currentMonth + " " + weekDayFormat + " " + currentYear + " " + endHour + " GMT+0200 (Eastern European Standard Time)"));
         const start = Date.parse(new Date(weekDayInShortName + " " + currentMonth + " " + weekDayFormat + " " + currentYear + " " + startHour + " GMT+0200 (Eastern European Standard Time)"));
         const time = ((end - start) + (start - Date.parse(presentDay)));
-
+        console.log();
         return time;
     }
 
@@ -80,7 +97,7 @@ class Clock extends Component {
     render() {
         const { days, hours, minutes, seconds } = this.state;
         return (
-            <div className="clock-details">
+            <div className="clock-details" onClick={this.dismiss}>
                 <div className = "clock-days" >
                     {this.zeroingTime(days)} Day
                 </div>

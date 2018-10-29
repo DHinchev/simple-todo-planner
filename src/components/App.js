@@ -100,6 +100,7 @@ class App extends Component {
               timeSlotRows={days}
               dayColumns={this.generateTimeSlots()}
               tasks={todos}
+              setParentState={this.storeTodos}
             />
           </div>
         </div>
