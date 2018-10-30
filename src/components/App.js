@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import DayGrid from './dayGrid';
+import DayGrid from './day-grid';
 import TimeSlotGrid from './time-slots';
-import GridPlanner from './gridPlanner';
-import Planner from './planner';
+import GridPlanner from './todo-card';
+import Planner from './todo-modal-container';
 
 class App extends Component {
   state = {

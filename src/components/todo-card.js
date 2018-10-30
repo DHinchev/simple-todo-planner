@@ -34,7 +34,7 @@ closeTaskDetails = (event) => {
   event.target.parentNode.classList.remove('open');
   const indexOfHeightArray = event.target.dataset.closeIndex;
   event.target.parentNode.style.height = tempTaskHeightArray[indexOfHeightArray] + 'px';
-debugger;
+
   const checkIfLastColumn = event.target.parentNode.parentNode.dataset.columnName;
   if (checkIfLastColumn === '6') {
     event.target.parentNode.style.right = 'auto'
@@ -59,7 +59,7 @@ setTasksPosition = () => {
   let timeSlotContainer;
   let taskArrayEnd;
   let matchStart;
-  let matchEnd
+  let matchEnd;
   let tasksArray;
   let elementHeight;
   let elementTop;
@@ -83,7 +83,7 @@ setTasksPosition = () => {
       taskHeightArray.push(elementHeight);
       taskTopArray.push(elementTop);
       tasksCount = taskTopArray.length;
-      console.log(taskHeightArray);
+
       val.style.height = taskHeightArray[index] + 'px';
       val.style.top = taskTopArray[index] + 'px';
     });
