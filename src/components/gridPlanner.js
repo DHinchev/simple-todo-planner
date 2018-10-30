@@ -22,77 +22,75 @@ handleRemoveTodo = (index) => {
 }
 
 openTaskDetails = (event) => {
-    const checkIfLastColumn = event.target.parentNode.parentNode.dataset.columnName;
-    if (checkIfLastColumn === '6') {
-      event.target.parentNode.style.right = '0px'
-    }
-    event.target.parentNode.classList.add('open');
-    event.target.parentNode.style.height = 'auto';
+  const checkIfLastColumn = event.target.parentNode.parentNode.dataset.columnName;
+  if (checkIfLastColumn === '6') {
+    event.target.parentNode.style.right = '0px'
+  }
+  event.target.parentNode.classList.add('open');
+  event.target.parentNode.style.height = 'auto';
 }
 
 closeTaskDetails = (event) => {
-    event.target.parentNode.classList.remove('open');
-    const indexOfHeightArray = event.target.dataset.closeIndex;
-    event.target.parentNode.style.height = tempTaskHeightArray[indexOfHeightArray] + 'px';
-
-    const checkIfLastColumn = event.target.parentNode.parentNode.dataset.columnName;
-    if (checkIfLastColumn === '6') {
-      event.target.parentNode.style.right = 'auto'
-    }
+  event.target.parentNode.classList.remove('open');
+  const indexOfHeightArray = event.target.dataset.closeIndex;
+  event.target.parentNode.style.height = tempTaskHeightArray[indexOfHeightArray] + 'px';
+debugger;
+  const checkIfLastColumn = event.target.parentNode.parentNode.dataset.columnName;
+  if (checkIfLastColumn === '6') {
+    event.target.parentNode.style.right = 'auto'
+  }
 }
 
 getMatch = (arr1, arr2) => {
-    var matches = [];
+  var matches = [];
 
-    for (var i = 0; i < arr1.length; i++) {
-        for (var e = 0; e < arr2.length; e++) {
-            if (arr1[i] === arr2[e]) matches.push(arr1[i]);
-        }
+  for (var i = 0; i < arr1.length; i++) {
+    for (var e = 0; e < arr2.length; e++) {
+      if (arr1[i] === arr2[e]) matches.push(arr1[i]);
     }
-    return matches;
+  }
+  return matches;
 }
 
 setTasksPosition = () => {
-    let topPosition=[];
-    let endPosition=[];
-    let taskArrayStart;
-    let timeSlotContainer;
-    let taskArrayEnd;
-    let taskArrayDay;
-    let matchStart;
-    let matchEnd
-    let tasksArray;
-    let elementHeight;
-    let elementTop;
-    let timeSlotElementHeight;
+  let topPosition=[];
+  let endPosition=[];
+  let taskArrayStart;
+  let timeSlotContainer;
+  let taskArrayEnd;
+  let matchStart;
+  let matchEnd
+  let tasksArray;
+  let elementHeight;
+  let elementTop;
+  let timeSlotElementHeight;
     
-    if (this.props.tasks.length) {
-        tasksArray = [...document.getElementsByClassName('list-group-item')];
-        timeSlotContainer = [...document.querySelectorAll('[data-time]')].map(el => el.getAttribute('data-time'));
-        timeSlotElementHeight = document.querySelectorAll('.time-unit')[1].offsetHeight;
-        taskArrayStart = tasksArray.map(el => el.getAttribute('data-start'));
-        taskArrayEnd = tasksArray.map(el => el.getAttribute('data-end'));
-        taskArrayDay = tasksArray.map(el => el.getAttribute('data-day'));
-        matchStart = this.getMatch(taskArrayStart, timeSlotContainer);
-        matchEnd = this.getMatch(taskArrayEnd, timeSlotContainer);
+  if (this.props.tasks.length) {
+    tasksArray = [...document.getElementsByClassName('list-group-item')];
+    timeSlotContainer = [...document.querySelectorAll('[data-time]')].map(el => el.getAttribute('data-time'));
+    timeSlotElementHeight = document.querySelectorAll('.time-unit')[1].offsetHeight;
+    taskArrayStart = tasksArray.map(el => el.getAttribute('data-start'));
+    taskArrayEnd = tasksArray.map(el => el.getAttribute('data-end'));
+    matchStart = this.getMatch(taskArrayStart, timeSlotContainer);
+    matchEnd = this.getMatch(taskArrayEnd, timeSlotContainer);
 
-        tasksArray.forEach(function (val, index) {
-          topPosition.push(document.querySelector('[data-time=' + CSS.escape(matchStart[index]) + ']').getAttribute('data-time-index'));
-          endPosition.push(document.querySelector('[data-time=' + CSS.escape(matchEnd[index]) + ']').getAttribute('data-time-index'));
+    tasksArray.forEach(function (val, index) {
+      topPosition.push(document.querySelector('[data-time=' + CSS.escape(matchStart[index]) + ']').getAttribute('data-time-index'));
+      endPosition.push(document.querySelector('[data-time=' + CSS.escape(matchEnd[index]) + ']').getAttribute('data-time-index'));
 
-          elementHeight = (endPosition[index] - topPosition[index]) * timeSlotElementHeight;
-          elementTop = topPosition[index] * timeSlotElementHeight;
-          taskHeightArray.push(elementHeight);
-          taskTopArray.push(elementTop);
-          tasksCount = taskTopArray.length;
-
-          val.style.height = taskHeightArray[index] + 'px';
-          val.style.top = taskTopArray[index] + 'px';
-        });
-    }
-    tempTaskHeightArray = taskHeightArray;
-    taskHeightArray = [];
-    taskTopArray = [];
+      elementHeight = (endPosition[index] - topPosition[index]) * timeSlotElementHeight;
+      elementTop = topPosition[index] * timeSlotElementHeight;
+      taskHeightArray.push(elementHeight);
+      taskTopArray.push(elementTop);
+      tasksCount = taskTopArray.length;
+      console.log(taskHeightArray);
+      val.style.height = taskHeightArray[index] + 'px';
+      val.style.top = taskTopArray[index] + 'px';
+    });
+  }
+  tempTaskHeightArray = taskHeightArray;
+  taskHeightArray = [];
+  taskTopArray = [];
 }
 
   render() {
