@@ -9,8 +9,7 @@ class TodoModal extends Component {
         todoDay: "Monday",
         todoDayIndex: "0",
         todoStartTime: "09:00",
-        todoEndTime: "09:15",
-        todoId: "0",
+        todoEndTime: "09:15"
     };
 
     handleInputChange = (event) => {

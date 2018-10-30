@@ -86,8 +86,10 @@ setTasksPosition = () => {
 
       val.style.height = taskHeightArray[index] + 'px';
       val.style.top = taskTopArray[index] + 'px';
+      val.getElementsByClassName('close-icon-task')[0].dataset.closeIndex = index;
     });
   }
+
   tempTaskHeightArray = taskHeightArray;
   taskHeightArray = [];
   taskTopArray = [];
@@ -103,35 +105,34 @@ setTasksPosition = () => {
             {tasks.map((tasks, index) => (
               (parseInt(tasks.todoDayIndex, 10) === indexColumn) ?
                 <div className="list-group-item task"
-                    key={tasks.todoTitle}
-                    data-start={tasks.todoStartTime}
-                    data-end={tasks.todoEndTime}
-                    data-day={tasks.todoDayIndex}
+                  key={tasks.todoTitle}
+                  data-start={tasks.todoStartTime}
+                  data-end={tasks.todoEndTime}
+                  data-day={tasks.todoDayIndex}
                 >
-                    <img src={Plus} 
-                        className="plus-icon-task"
-                        width="25px" height="25px"
-                        alt="plus icon for task"
-                        onClick={this.openTaskDetails}
-                    />
-                    <img src={Close}
-                        className="close-icon-task"
-                        width="35px" height="35px"
-                        alt="close icon for task"
-                        data-close-index={index}
-                        onClick={this.closeTaskDetails}
-                    />
+                  <img src={Plus} 
+                    className="plus-icon-task"
+                    width="25px" height="25px"
+                    alt="plus icon for task"
+                    onClick={this.openTaskDetails}
+                  />
+                  <img src={Close}
+                    className="close-icon-task"
+                    width="35px" height="35px"
+                    alt="close icon for task"
+                    onClick={this.closeTaskDetails}
+                  />
                     <h4 className="list-group-item-heading" >
-                        {tasks.todoTitle} {" "}
-                        <span className="label label-info" >
-                            {tasks.todoPriority}
-                        </span>
+                      {tasks.todoTitle} {" "} {index}
+                      <span className="label label-info" >
+                        {tasks.todoPriority}
+                      </span>
                     </h4>
                     <p className="list-group-item-responsible">
-                        {tasks.todoResponsible}
+                      {tasks.todoResponsible}
                     </p>
                     <p className="list-group-item-description">
-                        {tasks.todoDescription}
+                      {tasks.todoDescription}
                     </p>
                       <Clock
                         startTime={tasks.todoStartTime}
