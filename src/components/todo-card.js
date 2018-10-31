@@ -123,7 +123,7 @@ setTasksPosition = () => {
                     onClick={this.closeTaskDetails}
                   />
                     <h4 className="list-group-item-heading" >
-                      {tasks.todoTitle} {" "} {index}
+                      {tasks.todoTitle} {" "}
                       <span className="label label-info" >
                         {tasks.todoPriority}
                       </span>
