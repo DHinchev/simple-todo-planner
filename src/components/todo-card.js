@@ -96,12 +96,60 @@ setTasksPosition = () => {
 }
 
   render() {
-    const {timeSlotRows, dayColumns, tasks} = this.props;
+    const {timeSlotRows, dayColumns, tasks, mobileDaySelection, checkMobile} = this.props;
+
     return (
       <div className="grid-planner">
           {timeSlotRows.map((val,indexColumn) => 
-            <div className="columns" key={val} data-column-name={indexColumn}>
-
+            (checkMobile === true) ?
+            (val === mobileDaySelection) ?
+              <div className="columns" key={val} data-column-name={indexColumn}>
+              {tasks.map((tasks, index) => (
+                (parseInt(tasks.todoDayIndex, 10) === indexColumn) ?
+                  <div className="list-group-item task"
+                    key={tasks.todoTitle}
+                    data-start={tasks.todoStartTime}
+                    data-end={tasks.todoEndTime}
+                    data-day={tasks.todoDayIndex}
+                  >
+                    <img src={Plus} 
+                      className="plus-icon-task"
+                      width="25px" height="25px"
+                      alt="plus icon for task"
+                      onClick={this.openTaskDetails}
+                    />
+                    <img src={Close}
+                      className="close-icon-task"
+                      width="35px" height="35px"
+                      alt="close icon for task"
+                      onClick={this.closeTaskDetails}
+                    />
+                      <h4 className="list-group-item-heading" >
+                        {tasks.todoTitle} {" "}
+                        <span className="label label-info" >
+                          {tasks.todoPriority}
+                        </span>
+                      </h4>
+                      <p className="list-group-item-responsible">
+                        {tasks.todoResponsible}
+                      </p>
+                      <p className="list-group-item-description">
+                        {tasks.todoDescription}
+                      </p>
+                        <Clock
+                          startTime={tasks.todoStartTime}
+                          endTime={tasks.todoEndTime}
+                          dayOfWeek={tasks.todoDay}
+                          dayIndex={parseInt(tasks.todoDayIndex, 10)}
+                        />
+                      <button className="btn btn-danger btn-sm" onClick={() => this.handleRemoveTodo(index)}> Delete </button>
+                  </div>
+              : null))}
+              
+              {dayColumns.map(indexRow => <div className="rows" key={indexRow}></div>)}
+            </div>
+            : null
+            : <div className="columns" key={val} data-column-name={indexColumn}>
             {tasks.map((tasks, index) => (
               (parseInt(tasks.todoDayIndex, 10) === indexColumn) ?
                 <div className="list-group-item task"
@@ -143,9 +191,10 @@ setTasksPosition = () => {
                     <button className="btn btn-danger btn-sm" onClick={() => this.handleRemoveTodo(index)}> Delete </button>
                 </div>
             : null))}
-        
-              {dayColumns.map(indexRow => <div className="rows" key={indexRow}></div>)}
-            </div>)}   
+            
+            {dayColumns.map(indexRow => <div className="rows" key={indexRow}></div>)}
+          </div>)}  
+             
       </div>
     );
   }

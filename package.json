@@ -8,6 +8,7 @@
     "moment": "^2.22.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "react-key-index": "^0.1.1",
     "react-scripts": "1.1.4",
     "reactstrap": "^6.5.0",
     "url-parse": "^1.4.3"

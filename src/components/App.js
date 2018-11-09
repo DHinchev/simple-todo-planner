@@ -11,13 +11,23 @@ class App extends Component {
     daysNum: '',
     timeSlotLength: '',
     openPlanner: false,
-    days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    width: window.innerWidth,
+    dayOfWeek: 'Monday'
   };
 
   componentDidMount = () => {
     this.setState({
       timesList: this.generateTimeSlots()
     });
+  }
+
+  componentWillMount() {
+    window.addEventListener('resize', this.handleWindowSizeChange);
+  }
+
+  componentWillUnmount() {
+      window.removeEventListener('resize', this.handleWindowSizeChange);
   }
 
   storeTodos = (value) => {
@@ -74,8 +84,28 @@ class App extends Component {
    return timeSlotsBetween;
   }
 
+  handleWindowSizeChange = () => {
+    this.setState({ width: window.innerWidth });
+  };
+
+  handleChange = (event) => {
+      this.setState({dayOfWeek: event.target.value});
+  }
+
   render() {
-    const { openPlanner, timesList, todos, days } = this.state;
+    const { openPlanner, timesList, todos, days, dayOfWeek, width } = this.state;
+    const isMobile = width <= 1100;
+    let dropdownElement;
+
+    if(isMobile) {
+      dropdownElement = <div>
+        <select className="drop-down-days-selector" value={dayOfWeek} onChange={this.handleChange}>
+          {days.map(index => <option key={index} value={index}>{index}</option>)}
+        </select>
+      </div>
+    } else {
+      dropdownElement = <div></div>
+    }
 
     return (
       <div className="App">
@@ -92,6 +122,9 @@ class App extends Component {
             Todo Count: <span> {todos.length} </span>
           </h4>
         </div>
+        <div className="select-day">
+          {dropdownElement}
+        </div>
         <div className="grid-times">
           <TimeSlotGrid timesSlots={timesList}/>
           <div className="grid-days">
@@ -101,6 +134,8 @@ class App extends Component {
               dayColumns={this.generateTimeSlots()}
               tasks={todos}
               setParentState={this.storeTodos}
+              mobileDaySelection={dayOfWeek}
+              checkMobile={isMobile}
             />
           </div>
         </div>
